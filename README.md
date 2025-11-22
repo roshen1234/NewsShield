@@ -126,30 +126,67 @@ jupyter notebook notebooks/02_multiclass_classifier_training.ipynb
 jupyter notebook notebooks/03_kid_safe_rewriter_training.ipynb
 ```
 
-### Running Inference
+### Running the Web UI
 
 #### Using Gradio Interface
 
-```bash
-python app.py
-```
+1. **Navigate to the project directory:**
+   ```bash
+   cd NewsShield
+   ```
 
-The interface will be available at `http://localhost:7860`
+2. **Run the application:**
+   ```bash
+   python ui/app.py
+   ```
 
-#### Using Python Script
+3. **Open your browser:**
+   - The interface will be available at `http://localhost:7860`
+   - Click "⚙️ Load Models" to initialize the classifier and rewriter models
+   - Enter a news article and click "🚀 Process Article" to classify and rewrite
 
-```python
-from app import process_article
+#### Using the Interface
 
-# Process an article
-article_text = "Your news article here..."
-article_title = "Article Title"
+1. **Load Models**: Click "⚙️ Load Models" to initialize the classifier and rewriter models (required before processing)
 
-predicted_label, probs_text, probs_dict, rewritten = process_article(article_text, article_title)
+2. **Enter Article**: 
+   - Paste your news article in the text box
+   - Optionally add a title
 
-print(f"Classification: {predicted_label}")
-print(f"Rewritten Article:\n{rewritten}")
-```
+3. **Process**: Click "🚀 Process Article" to:
+   - Classify the article (SAFE/SENSITIVE/UNSAFE)
+   - See confidence scores for each category
+   - Get a kid-safe rewrite (if applicable)
+
+#### Classification Labels
+
+- 🟢 **SAFE**: Content is already appropriate for children
+- 🟡 **SENSITIVE**: Content needs rewriting to be child-friendly  
+- 🔴 **UNSAFE**: Content cannot be made safe for children
+
+#### Output
+
+The interface displays:
+- **Classification Results**: Label and confidence scores for all three categories
+- **Original Article**: The input article
+- **Kid-Safe Rewrite**: The rewritten version (if SAFE or SENSITIVE)
+
+#### Troubleshooting
+
+**Models not loading?**
+- Check that model directories exist and contain the required files:
+  - `models/multiclass_classifier/best_model/` (classifier)
+  - `models/kid_safe_rewriter/best_model/` (rewriter)
+- Ensure you have enough GPU/CPU memory
+- Check that transformers and peft libraries are installed
+
+**Slow processing?**
+- First run will be slower (model loading)
+- GPU acceleration significantly speeds up inference
+- Consider reducing max_new_tokens if generation is too slow
+
+**Port already in use?**
+- Change the port in `ui/app.py`: `demo.launch(server_port=7861)`
 
 ## Project Structure
 
@@ -176,6 +213,8 @@ NewsShield-main/
 │   ├── gemini_label_data.py
 │   ├── deepseek_safe_summarize.ipynb
 │   └── deepseek_sensitive_reframe.ipynb
+├── ui/
+│   └── app.py                  # Gradio web interface
 ├── results/                    # All outputs from notebooks (nothing at root level)
 │   ├── data_preparation/       # Notebook 1 outputs
 │   │   ├── label_distribution.png
@@ -193,7 +232,6 @@ NewsShield-main/
 │       ├── label_distribution.png
 │       ├── text_length_distribution.png
 │       └── comparison_*.png     # Comparison visualizations
-├── app.py                      # Gradio interface
 ├── requirements.txt            # Python dependencies
 └── README.md                   # This file
 ```
