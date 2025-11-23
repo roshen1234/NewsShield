@@ -6,19 +6,7 @@ NewsShield is a deep learning system designed to classify and reframe news artic
 
 ## System Architecture
 
-### Pipeline Flow
-
-```
-Input News Articles
-    ↓
-[Multiclass Classifier Training] → RoBERTa-base (SAFE/SENSITIVE/UNSAFE)
-    ↓
-[Content Reframer Training] → Mistral-7B-Instruct with LoRA
-    ↓
-[Inference Pipeline] → Classify → Reframe based on label
-    ↓
-Kid-Safe Rewritten Article
-```
+![System architecture diagram](docs/architecture/architecture_diagram.jpg)
 
 ## Dataset
 
@@ -299,7 +287,6 @@ NewsShield-main/
 3. **Reframing Quality**: Room for improvement in faithfulness and style consistency
 4. **Evaluation Metrics**: Need human evaluation for quality assessment
 
-
 ## Ethical Considerations
 
 ### Responsible AI
@@ -315,7 +302,6 @@ NewsShield-main/
 2. **False Negatives**: UNSAFE content slipping through (critical issue)
 3. **Cultural Sensitivity**: Ensuring content is appropriate across cultures
 4. **Age Appropriateness**: Balancing safety with educational value
-
 
 ## Acknowledgments
 
